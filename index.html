@@ -350,8 +350,9 @@
       border-radius: 36px;
       background: linear-gradient(145deg, #4f46e5, #6366f1);
       color: #fff;
-      font-size: 90px;
+      font-size: 100px;
       font-weight: 900;
+      font-family: 'Times New Roman', Times, serif;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -468,8 +469,9 @@
       background: #ffffff;
       border: 4px solid #cbd5e1;
       box-shadow: 0 8px 0 #94a3b8;
-      font-size: 54px;
+      font-size: 64px;
       font-weight: 900;
+      font-family: 'Times New Roman', Times, serif;
       color: #1e293b;
       display: flex;
       align-items: center;
@@ -754,8 +756,8 @@
     }
 
     @media (max-width: 640px) {
-      .giant-letter-card { width: 150px; height: 150px; font-size: 70px; }
-      .letter-tile { height: 115px; font-size: 40px; }
+      .giant-letter-card { width: 150px; height: 150px; font-size: 72px; }
+      .letter-tile { height: 115px; font-size: 42px; }
     }
   </style>
 </head>
@@ -1239,9 +1241,23 @@ const AudioEngine = {
     if (!('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
+      
+      // 1. Fonetický slovník fix (Zamezení čtení L jako "padesátý")
+      let textToSpeak = text;
+      const phoneticDict = {
+          "L": "lll", "l": "lll",
+          "S": "sss", "s": "sss",
+          "M": "mmm", "m": "mmm",
+          "P": "p.",  "p": "p."
+      };
+      Object.keys(phoneticDict).forEach(letter => {
+          const regex = new RegExp(`\\b${letter}\\b`, 'g');
+          textToSpeak = textToSpeak.replace(regex, phoneticDict[letter]);
+      });
+
+      const utter = new SpeechSynthesisUtterance(textToSpeak);
       utter.lang = 'cs-CZ';
-      utter.rate = opts.rate || 0.95;
+      utter.rate = opts.rate || 0.9;
       utter.pitch = opts.pitch || 1.02;
 
       if (this.selectedVoiceURI) {
@@ -1706,7 +1722,7 @@ const LetterLesson = {
 
   renderStep1Intro() {
     const view = document.getElementById('main-view');
-    const displayChar = this.item.pairLabel ? 'I i / Y y' : `${this.item.letter} ${this.item.letter.toLowerCase()}`;
+    const displayChar = this.item.letter === 'I' ? 'I i / Y y' : `${this.item.letter} ${this.item.letter.toLowerCase()}`;
     const threeWords = this.item.words.slice(0, 3);
     const instruction = 'Toto je písmeno ' + this.item.letter;
 
@@ -1833,11 +1849,13 @@ const LetterLesson = {
         </div>
 
         <div class="letter-grid-6">
-          ${tiles.map(ch => `
-            <div class="letter-tile serif-font" onclick="LetterLesson.checkLetterTile(this, '${ch}', '${targetChar}')">
-              ${ch} ${ch.toLowerCase()}
+          ${tiles.map(ch => {
+            const displayCh = ch === 'I' ? 'I i / Y y' : (ch === 'Y' ? 'Y y' : `${ch} ${ch.toLowerCase()}`);
+            return `
+            <div class="letter-tile" onclick="LetterLesson.checkLetterTile(this, '${ch}', '${targetChar}')">
+              ${displayCh}
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
       </div>
     `;
@@ -1913,12 +1931,14 @@ const TracingController = {
   completed: false,
   onComplete: null,
   checkpoints: [],
+  currentPct: 0,
 
   init(letter, onComplete) {
     this.letter = letter;
     this.onComplete = onComplete;
     this.completed = false;
     this.isDrawing = false;
+    this.currentPct = 0;
 
     this.templateCanvas = document.getElementById('trace-template-canvas');
     this.userCanvas = document.getElementById('trace-user-canvas');
@@ -1996,6 +2016,7 @@ const TracingController = {
   clearUserDrawing() {
     this.uCtx.clearRect(0, 0, 340, 340);
     this.checkpoints.forEach(cp => cp.hit = false);
+    this.currentPct = 0;
     this.updateMeter(0);
   },
 
@@ -2039,6 +2060,14 @@ const TracingController = {
       if (!this.isDrawing) return;
       e.preventDefault();
       this.isDrawing = false;
+      
+      // Vyhodnocení obkreslování AŽ PO zvednutí prstu
+      if (this.currentPct >= 90 && !this.completed) {
+        this.completed = true;
+        setTimeout(() => {
+          if (this.onComplete) this.onComplete();
+        }, 350);
+      }
     };
 
     this.userCanvas.onmousedown = start;
@@ -2059,15 +2088,8 @@ const TracingController = {
       if (cp.hit) hitCount++;
     });
 
-    const pct = Math.min(100, Math.round((hitCount / this.checkpoints.length) * 100));
-    this.updateMeter(pct);
-
-    if (pct >= 82 && !this.completed) {
-      this.completed = true;
-      setTimeout(() => {
-        if (this.onComplete) this.onComplete();
-      }, 350);
-    }
+    this.currentPct = Math.min(100, Math.round((hitCount / this.checkpoints.length) * 100));
+    this.updateMeter(this.currentPct);
   },
 
   updateMeter(pct) {
@@ -2120,13 +2142,12 @@ const SummaryNineGame = {
 
         <div class="letter-grid-6">
           ${choices.map(ch => {
-            const label = ch.pairLabel ? 'I i / Y y' : `${ch.letter} ${ch.letter.toLowerCase()}`;
+            const displayCh = ch.letter === 'I' ? 'I i / Y y' : `${ch.letter} ${ch.letter.toLowerCase()}`;
             return `
-            <div class="letter-tile serif-font" onclick="SummaryNineGame.check(this, '${ch.letter}', '${current.letter}')">
-              ${label}
+            <div class="letter-tile" onclick="SummaryNineGame.check(this, '${ch.letter}', '${current.letter}')">
+              ${displayCh}
             </div>
-            `;
-          }).join('')}
+          `}).join('')}
         </div>
       </div>
     `;
