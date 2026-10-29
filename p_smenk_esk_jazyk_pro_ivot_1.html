@@ -1,0 +1,2629 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Písmenkář – Český jazyk pro život 1</title>
+  <style>
+    :root {
+      --bg-sky: #eef6ff;
+      --bg-card: #ffffff;
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --secondary: #f59e0b;
+      --secondary-dark: #d97706;
+      --success: #10b981;
+      --success-dark: #047857;
+      --danger: #ef4444;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --shadow-card: 0 8px 0 rgba(15, 23, 42, 0.08), 0 12px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(160deg, #dbeafe 0%, #fef3c7 50%, #fce7f3 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 18px;
+      border-radius: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      font-weight: 900;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 0 #312e81;
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      color: #1e1b4b;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .topbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .star-counter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fffbeb;
+      border: 3px solid #fde68a;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 22px;
+      font-weight: 900;
+      color: #b45309;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s;
+      font-family: inherit;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 6px 0 var(--primary-dark);
+    }
+    .btn-primary:active { box-shadow: 0 2px 0 var(--primary-dark); }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: #fff;
+      box-shadow: 0 6px 0 var(--secondary-dark);
+    }
+    .btn-secondary:active { box-shadow: 0 2px 0 var(--secondary-dark); }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 6px 0 var(--success-dark);
+    }
+    .btn-success:active { box-shadow: 0 2px 0 var(--success-dark); }
+
+    .btn-light {
+      background: #f1f5f9;
+      color: #334155;
+      border: 2px solid #cbd5e1;
+      box-shadow: 0 5px 0 #cbd5e1;
+    }
+    .btn-light:active { box-shadow: 0 1px 0 #cbd5e1; }
+
+    .btn-speaker-giant {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: white;
+      font-size: 40px;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 0 #b45309, 0 12px 20px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s;
+    }
+    .btn-speaker-giant:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #b45309;
+    }
+
+    #main-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    .chapter-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      border: 3px solid #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.15s ease;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .chapter-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .chapter-title {
+      font-size: 21px;
+      font-weight: 900;
+      margin: 0;
+      color: #1e293b;
+    }
+
+    .chapter-pages {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .letter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .letter-pill {
+      position: relative;
+      min-width: 68px;
+      height: 68px;
+      padding: 0 16px;
+      border-radius: 20px;
+      background: #f8fafc;
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 5px 0 #cbd5e1;
+      font-size: 28px;
+      font-weight: 900;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .letter-pill:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #cbd5e1;
+    }
+
+    .letter-pill.completed {
+      background: #ecfdf5;
+      border-color: #10b981;
+      box-shadow: 0 5px 0 #059669;
+      color: #065f46;
+    }
+
+    .letter-pill .pill-star {
+      position: absolute;
+      top: -10px;
+      right: -8px;
+      font-size: 22px;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    }
+
+    .stage-box {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 32px;
+      padding: 20px 24px 28px;
+      box-shadow: var(--shadow-card);
+      border: 4px solid #fff;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 540px;
+      position: relative;
+    }
+
+    .step-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .step-dot {
+      width: 42px;
+      height: 16px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      transition: all 0.25s;
+    }
+
+    .step-dot.done {
+      background: #10b981;
+    }
+
+    .step-dot.active {
+      width: 64px;
+      background: #4f46e5;
+      box-shadow: 0 0 0 4px #e0e7ff;
+    }
+
+    .giant-letter-card {
+      width: 190px;
+      height: 190px;
+      border-radius: 36px;
+      background: linear-gradient(145deg, #4f46e5, #6366f1);
+      color: #fff;
+      font-size: 120px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 0 #312e81, 0 18px 30px rgba(79, 70, 229, 0.3);
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s;
+      margin: 8px 0;
+    }
+
+    .giant-letter-card:active {
+      transform: scale(0.95) translateY(6px);
+      box-shadow: 0 6px 0 #312e81;
+    }
+
+    .giant-letter-card .speaker-corner {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-size: 28px;
+      background: rgba(255,255,255,0.25);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 860px;
+      margin: 16px 0;
+    }
+
+    .pic-card {
+      background: #ffffff;
+      border: 4px solid #e2e8f0;
+      border-radius: 28px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #cbd5e1;
+      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s;
+      min-height: 210px;
+    }
+
+    .pic-card:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #cbd5e1;
+    }
+
+    .pic-card.correct {
+      background: #ecfdf5;
+      border-color: #10b981;
+      box-shadow: 0 8px 0 #059669;
+      animation: popScale 0.45s ease;
+    }
+
+    .pic-card.wrong {
+      background: #fef2f2;
+      border-color: #ef4444;
+      box-shadow: 0 8px 0 #dc2626;
+      animation: shakeAnim 0.4s ease;
+    }
+
+    .svg-icon-box {
+      width: 92px;
+      height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    }
+
+    .svg-icon-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pic-word {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      color: #1e293b;
+      text-transform: uppercase;
+    }
+
+    .pic-word .highlight-char {
+      color: #ef4444;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .letter-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      width: 100%;
+      max-width: 680px;
+      margin: 16px 0;
+    }
+
+    .letter-tile {
+      height: 145px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 4px solid #cbd5e1;
+      box-shadow: 0 8px 0 #94a3b8;
+      font-size: 76px;
+      font-weight: 900;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .letter-tile:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #94a3b8;
+    }
+
+    .letter-tile.correct {
+      background: #10b981;
+      border-color: #059669;
+      color: #fff;
+      box-shadow: 0 8px 0 #047857;
+      animation: popScale 0.45s ease;
+    }
+
+    .letter-tile.wrong {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+      animation: shakeAnim 0.4s ease;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      border-radius: 32px;
+      background: #f8fafc;
+      border: 5px dashed #94a3b8;
+      box-shadow: inset 0 4px 12px rgba(0,0,0,0.05);
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .canvas-wrapper canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .coverage-meter {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 340px;
+      margin-top: 10px;
+    }
+
+    .coverage-bar-bg {
+      flex: 1;
+      height: 22px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 2px solid #cbd5e1;
+    }
+
+    .coverage-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #10b981);
+      transition: width 0.15s ease;
+    }
+
+    .syllable-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .syl-block {
+      min-width: 130px;
+      height: 130px;
+      padding: 0 24px;
+      border-radius: 28px;
+      font-size: 68px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .syl-consonant {
+      background: #3b82f6;
+      box-shadow: 0 8px 0 #1d4ed8;
+    }
+
+    .syl-vowel {
+      background: #ec4899;
+      box-shadow: 0 8px 0 #be185d;
+    }
+
+    .syl-merged {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      box-shadow: 0 10px 0 #4338ca;
+      min-width: 190px;
+      font-size: 76px;
+    }
+
+    .magnetic-board {
+      width: 100%;
+      min-height: 140px;
+      background: #f0fdf4;
+      border: 5px solid #86efac;
+      border-radius: 28px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.04);
+    }
+
+    .magnet-tile {
+      min-width: 72px;
+      height: 84px;
+      padding: 0 16px;
+      border-radius: 18px;
+      background: #fff;
+      border: 3px solid #4f46e5;
+      box-shadow: 0 6px 0 #3730a3;
+      font-size: 46px;
+      font-weight: 900;
+      color: #1e1b4b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .magnet-tile.vowel-tile {
+      border-color: #ec4899;
+      box-shadow: 0 6px 0 #be185d;
+      color: #831843;
+    }
+
+    .magnet-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 10px 0;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      background: #ffffff;
+      width: 100%;
+      max-width: 920px;
+      max-height: 90vh;
+      border-radius: 28px;
+      padding: 24px;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
+
+    .phoneme-tuner-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .preset-chip {
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .preset-chip.active {
+      background: #4f46e5;
+      color: #fff;
+      border-color: #4f46e5;
+    }
+
+    .rec-btn {
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      cursor: pointer;
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .rec-btn.recording {
+      background: #ef4444;
+      color: #fff;
+      animation: pulseRec 1s infinite;
+    }
+
+    #celebration-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1200;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      color: #fff;
+      text-align: center;
+      padding: 24px;
+    }
+
+    #celebration-overlay.show {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .star-burst {
+      font-size: 130px;
+      animation: popScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 10px 25px rgba(245, 158, 11, 0.6));
+    }
+
+    @keyframes popScale {
+      0% { transform: scale(0.5); opacity: 0.3; }
+      70% { transform: scale(1.12); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    @keyframes pulseRec {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 640px) {
+      .giant-letter-card { width: 150px; height: 150px; font-size: 92px; }
+      .letter-tile { height: 115px; font-size: 56px; }
+      .canvas-wrapper, .coverage-meter { width: 290px; }
+      .canvas-wrapper { height: 290px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand" onclick="App.goHome()" title="Domů na výběr kapitol">
+      <div class="brand-logo">A</div>
+      <div>
+        <div class="brand-title">Písmenkář 1</div>
+        <div class="brand-subtitle">Český jazyk pro život • Hůlkové písmo</div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <button class="btn btn-light" onclick="App.goHome()" id="btn-home-nav" style="display:none;">
+        🏠 Domů
+      </button>
+      <div class="star-counter" title="Získané hvězdičky">
+        ⭐ <span id="star-count-text">0</span>
+      </div>
+      <button class="btn btn-light" onclick="ParentModal.open()" title="Nastavení hlasu, test hlásek na tabletu a vlastní nahrávky">
+        🔊 Hlas & Rodiče
+      </button>
+    </div>
+  </header>
+
+  <main id="main-view"></main>
+</div>
+
+<div id="celebration-overlay" onclick="App.closeCelebration()">
+  <div class="star-burst">🌟</div>
+  <h1 style="font-size: 42px; margin: 0;">Výborně!</h1>
+  <button class="btn btn-secondary" style="font-size: 26px; padding: 18px 36px;">
+    Pokračovat ➔
+  </button>
+</div>
+
+<div class="modal-backdrop" id="parent-modal">
+  <div class="modal-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e2e8f0; padding-bottom:14px; margin-bottom:16px;">
+      <div>
+        <h2 style="margin:0; font-size:24px;">⚙️ Nastavení hlasu a ověření hlásek na tabletu</h2>
+        <div style="color:#64748b; font-size:14px;">Řešení výslovnosti jednotlivých hlásek (L, S, M, P...) v systému Android</div>
+      </div>
+      <button class="btn btn-light" onclick="ParentModal.close()">✖ Zavřít</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 20px;">
+      <div style="background:#f8fafc; padding:14px; border-radius:16px; border:2px solid #e2e8f0;">
+        <label style="display:flex; align-items:center; gap:10px; font-weight:800; cursor:pointer;">
+          <input type="checkbox" id="chk-short-prompts" style="width:22px; height:22px;" onchange="AudioEngine.setShortPrompts(this.checked)">
+          Zkrácené hlasové pokyny
+        </label>
+        <p style="margin:6px 0 0; font-size:13px; color:#64748b;">
+          Doporučeno: V dalším kole se už neopakuje celá věta, ale rovnou zazní jen samotná hláska.
+        </p>
+      </div>
+
+      <div style="background:#f8fafc; padding:14px; border-radius:16px; border:2px solid #e2e8f0;">
+        <label style="display:flex; align-items:center; gap:10px; font-weight:800; cursor:pointer;">
+          <input type="checkbox" id="chk-use-mp3" style="width:22px; height:22px;" onchange="AudioEngine.setUseMp3(this.checked)">
+          Hledat nejprve soubory v <code>audio/*.mp3</code>
+        </label>
+        <p style="margin:6px 0 0; font-size:13px; color:#64748b;">
+          Pokud vedle HTML vytvoříte složku <code>audio/</code>, hra je přehraje přednostně.
+        </p>
+      </div>
+
+      <div style="background:#f8fafc; padding:14px; border-radius:16px; border:2px solid #e2e8f0;">
+        <div style="font-weight:800; margin-bottom:6px;">Syntezátor řeči (Web Speech API):</div>
+        <select id="voice-select" style="width:100%; padding:8px; border-radius:10px; font-weight:700;" onchange="AudioEngine.selectVoice(this.value)"></select>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button class="btn btn-light" style="padding:6px 12px; font-size:13px;" onclick="AudioEngine.speakText('Ahoj prvňáčku, jdeme se učit písmenka!')">▶ Test věty</button>
+          <button class="btn btn-light" style="padding:6px 12px; font-size:13px; color:#dc2626;" onclick="App.resetAllProgress()">🗑 Smazat hvězdy</button>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin: 12px 0 8px; font-size: 18px;">
+      1. Ověření a vyladění hlásek na tabletu (L, S, M, P, A, O, E, I, U)
+    </h3>
+    <p style="margin: 0 0 12px; font-size: 14px; color: #475569;">
+      Vyzkoušejte přednastavené fonetické zápisy nebo stiskněte <b>🎙 Nahrát vlastní hlas</b> přes mikrofon tabletu:
+    </p>
+
+    <div id="phoneme-tuner-list"></div>
+
+    <details style="margin-top:16px; background:#f1f5f9; padding:14px; border-radius:16px;">
+      <summary style="font-weight:800; cursor:pointer; font-size:16px;">
+        🎙 Studiový nahrávač všech zvuků (hlásky, slabiky, slova, pochvaly)
+      </summary>
+      <div id="all-audio-items-list" style="margin-top:12px; max-height:300px; overflow-y:auto;"></div>
+    </details>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   ROBUST SVG ICON FACTORY (Eliminates broken missing emoji characters on Android)
+   ============================================================================ */
+const SVG_ICONS = {
+  // L words
+  lampa: `<svg viewBox="0 0 100 100"><path d="M35 80 L65 80 L55 50 L45 50 Z" fill="#94a3b8"/><path d="M50 50 L50 25" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round"/><path d="M30 25 L70 25 L60 5 L40 5 Z" fill="#f59e0b"/><circle cx="50" cy="15" r="4" fill="#fef08a"/></svg>`,
+  lev: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#f59e0b"/><circle cx="50" cy="52" r="22" fill="#fbbf24"/><circle cx="41" cy="46" r="3" fill="#1e293b"/><circle cx="59" cy="46" r="3" fill="#1e293b"/><path d="M47 55 Q50 60 53 55" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M35 20 Q50 5 65 20 Q80 35 75 55 Q80 75 60 80 Q40 85 25 65 Q20 40 35 20" fill="#d97706" opacity="0.8"/></svg>`,
+  list: `<svg viewBox="0 0 100 100"><path d="M20 80 Q20 30 80 20 Q70 80 20 80 Z" fill="#10b981"/><path d="M20 80 Q50 50 80 20" stroke="#047857" stroke-width="4" fill="none"/></svg>`,
+  lod: `<svg viewBox="0 0 100 100"><path d="M20 70 L80 70 L70 88 L30 88 Z" fill="#3b82f6"/><path d="M50 15 L50 65" stroke="#1e293b" stroke-width="4"/><path d="M52 20 L80 40 L52 50 Z" fill="#ef4444"/><path d="M48 25 L20 45 L48 55 Z" fill="#f8fafc"/></svg>`,
+
+  // S words
+  slunce: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#f59e0b"/><g stroke="#f59e0b" stroke-width="5" stroke-linecap="round"><line x1="50" y1="10" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="90"/><line x1="10" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="90" y2="50"/><line x1="22" y1="22" x2="29" y2="29"/><line x1="71" y1="71" x2="78" y2="78"/><line x1="22" y1="78" x2="29" y2="71"/><line x1="71" y1="29" x2="78" y2="22"/></g></svg>`,
+  sova: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="26" ry="30" fill="#92400e"/><circle cx="38" cy="48" r="11" fill="#fff"/><circle cx="62" cy="48" r="11" fill="#fff"/><circle cx="38" cy="48" r="4" fill="#000"/><circle cx="62" cy="48" r="4" fill="#000"/><polygon points="50,52 45,62 55,62" fill="#f59e0b"/><path d="M30 32 L20 20 L38 30 Z" fill="#78350f"/><path d="M70 32 L80 20 L62 30 Z" fill="#78350f"/></svg>`,
+  syr: `<svg viewBox="0 0 100 100"><polygon points="15,75 85,75 50,25" fill="#facc15"/><circle cx="40" cy="55" r="7" fill="#ca8a04"/><circle cx="62" cy="62" r="5" fill="#ca8a04"/><circle cx="55" cy="42" r="4" fill="#ca8a04"/></svg>`,
+  srdce: `<svg viewBox="0 0 100 100"><path d="M50 85 L20 50 Q5 30 25 15 Q40 5 50 30 Q60 5 75 15 Q95 30 80 50 Z" fill="#ef4444"/></svg>`,
+
+  // M words
+  mama: `<svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#fbcfe8"/><path d="M30 80 Q30 55 50 55 Q70 55 70 80 Z" fill="#db2777"/><path d="M35 30 Q50 12 65 30 Q68 45 50 42 Q32 45 35 30 Z" fill="#78350f"/></svg>`,
+  medved: `<svg viewBox="0 0 100 100"><circle cx="32" cy="35" r="12" fill="#78350f"/><circle cx="68" cy="35" r="12" fill="#78350f"/><circle cx="50" cy="55" r="28" fill="#92400e"/><circle cx="50" cy="62" r="12" fill="#d97706"/><circle cx="42" cy="48" r="4" fill="#1e293b"/><circle cx="58" cy="48" r="4" fill="#1e293b"/><circle cx="50" cy="60" r="4" fill="#1e293b"/></svg>`,
+  mic: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#ef4444"/><path d="M15 50 Q50 30 85 50" stroke="#fff" stroke-width="5" fill="none"/><path d="M25 25 Q50 50 75 75" stroke="#fff" stroke-width="5" fill="none"/></svg>`,
+  motyl: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="5" ry="30" fill="#1e293b"/><path d="M50 40 Q20 10 15 45 Q20 75 50 55 Z" fill="#ec4899"/><path d="M50 40 Q80 10 85 45 Q80 75 50 55 Z" fill="#ec4899"/><circle cx="30" cy="35" r="5" fill="#facc15"/><circle cx="70" cy="35" r="5" fill="#facc15"/></svg>`,
+
+  // P words & Pila
+  pes: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="25" ry="20" fill="#d97706"/><circle cx="50" cy="38" r="18" fill="#d97706"/><polygon points="32,28 22,10 40,24" fill="#92400e"/><polygon points="68,28 78,10 60,24" fill="#92400e"/><circle cx="42" cy="34" r="3" fill="#000"/><circle cx="58" cy="34" r="3" fill="#000"/><circle cx="50" cy="42" r="5" fill="#000"/></svg>`,
+  papousek: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="20" ry="26" fill="#10b981"/><circle cx="58" cy="38" r="14" fill="#f59e0b"/><circle cx="64" cy="36" r="3" fill="#000"/><path d="M70 38 L85 42 L70 48 Z" fill="#1e293b"/><path d="M40 75 L30 95 L50 85 Z" fill="#ef4444"/></svg>`,
+  pila: `<svg viewBox="0 0 100 100"><rect x="15" y="45" width="70" height="30" rx="4" fill="#94a3b8"/><path d="M15 75 L15 88 L30 75 Z" fill="#334155"/><path d="M15 45 L20 30 L30 45 L35 30 L45 45 L50 30 L60 45 L65 30 L75 45 L80 30 L85 45 Z" fill="#64748b"/></svg>`,
+  prasatko: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="30" fill="#f472b6"/><ellipse cx="50" cy="60" rx="12" ry="8" fill="#db2777"/><circle cx="38" cy="44" r="4" fill="#000"/><circle cx="62" cy="44" r="4" fill="#000"/><polygon points="28,32 20,18 38,28" fill="#f472b6"/><polygon points="72,32 80,18 62,28" fill="#f472b6"/></svg>`,
+
+  // Vowels
+  auto: `<svg viewBox="0 0 100 100"><rect x="20" y="45" width="60" height="25" rx="8" fill="#ef4444"/><path d="M35 45 L45 25 L65 25 L75 45 Z" fill="#93c5fd"/><circle cx="35" cy="70" r="10" fill="#1e293b"/><circle cx="65" cy="70" r="10" fill="#1e293b"/><circle cx="35" cy="70" r="4" fill="#cbd5e1"/><circle cx="65" cy="70" r="4" fill="#cbd5e1"/></svg>`,
+  ananas: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="22" ry="28" fill="#f59e0b"/><path d="M50 30 L40 10 L50 20 L60 10 Z" fill="#10b981"/><path d="M35 48 L65 68 M35 68 L65 48" stroke="#78350f" stroke-width="3"/></svg>`,
+  aktovka: `<svg viewBox="0 0 100 100"><rect x="20" y="35" width="60" height="45" rx="8" fill="#8b5cf6"/><path d="M38 35 L38 25 L62 25 L62 35" stroke="#4c1d95" stroke-width="5" fill="none"/><rect x="42" y="50" width="16" height="12" rx="3" fill="#fde047"/></svg>`,
+  oko: `<svg viewBox="0 0 100 100"><path d="M15 50 Q50 20 85 50 Q50 80 15 50 Z" fill="#fff" stroke="#1e293b" stroke-width="4"/><circle cx="50" cy="50" r="18" fill="#3b82f6"/><circle cx="50" cy="50" r="8" fill="#1e293b"/><circle cx="44" cy="44" r="4" fill="#fff"/></svg>`,
+  okno: `<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" rx="4" fill="#78350f"/><rect x="26" y="26" width="22" height="26" fill="#93c5fd"/><rect x="52" y="26" width="22" height="26" fill="#93c5fd"/><rect x="26" y="56" width="22" height="18" fill="#93c5fd"/><rect x="52" y="56" width="22" height="18" fill="#93c5fd"/></svg>`,
+  opice: `<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="26" fill="#92400e"/><circle cx="26" cy="45" r="10" fill="#92400e"/><circle cx="74" cy="45" r="10" fill="#92400e"/><ellipse cx="50" cy="58" rx="18" ry="14" fill="#fde68a"/><circle cx="42" cy="48" r="3" fill="#000"/><circle cx="58" cy="48" r="3" fill="#000"/><path d="M45 64 Q50 70 55 64" stroke="#000" stroke-width="3" fill="none"/></svg>`,
+  eskymak: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="24" fill="#fed7aa"/><path d="M26 50 Q50 20 74 50 Q75 35 50 25 Q25 35 26 50 Z" fill="#ef4444"/><circle cx="42" cy="50" r="3" fill="#000"/><circle cx="58" cy="50" r="3" fill="#000"/></svg>`,
+  elf: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="22" fill="#fed7aa"/><polygon points="50,15 25,45 75,45" fill="#10b981"/><circle cx="40" cy="52" r="3" fill="#000"/><circle cx="60" cy="52" r="3" fill="#000"/></svg>`,
+  emu: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="20" ry="26" fill="#78350f"/><path d="M50 45 L50 20" stroke="#78350f" stroke-width="5"/><circle cx="50" cy="18" r="10" fill="#92400e"/><circle cx="54" cy="16" r="2" fill="#000"/><polygon points="58,18 70,20 58,22" fill="#f59e0b"/></svg>`,
+  indian: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="24" fill="#d97706"/><path d="M30 45 L50 15 L70 45 Z" fill="#ef4444"/><ellipse cx="50" cy="25" rx="6" ry="12" fill="#3b82f6"/><circle cx="42" cy="52" r="3" fill="#000"/><circle cx="58" cy="52" r="3" fill="#000"/></svg>`,
+  iglu: `<svg viewBox="0 0 100 100"><path d="M20 75 A 32 32 0 0 1 80 75 Z" fill="#e2e8f0"/><path d="M40 75 A 12 12 0 0 1 60 75 Z" fill="#94a3b8"/><line x1="20" y1="55" x2="80" y2="55" stroke="#cbd5e1" stroke-width="3"/><line x1="30" y1="40" x2="70" y2="40" stroke="#cbd5e1" stroke-width="3"/></svg>`,
+  injekce: `<svg viewBox="0 0 100 100"><rect x="42" y="30" width="16" height="45" rx="3" fill="#3b82f6"/><rect x="46" y="15" width="8" height="15" fill="#94a3b8"/><line x1="50" y1="5" x2="50" y2="15" stroke="#64748b" stroke-width="3"/><rect x="44" y="75" width="12" height="12" fill="#ef4444"/></svg>`,
+  ucho: `<svg viewBox="0 0 100 100"><path d="M40 20 Q20 20 20 50 Q20 80 50 80 Q75 80 75 55 Q75 35 60 30 Q50 25 50 45" stroke="#d97706" stroke-width="8" fill="none" stroke-linecap="round"/></svg>`,
+  ulita: `<svg viewBox="0 0 100 100"><path d="M50 70 A 22 22 0 1 1 50 30 A 14 14 0 1 1 50 50 A 6 6 0 1 1 50 58" stroke="#f59e0b" stroke-width="10" fill="none" stroke-linecap="round"/></svg>`,
+  uzel: `<svg viewBox="0 0 100 100"><path d="M20 30 Q50 70 80 30 M20 70 Q50 30 80 70" stroke="#ec4899" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="10" fill="#db2777"/></svg>`
+};
+
+function renderSvgIcon(name, fallbackEmoji) {
+  const svg = SVG_ICONS[name];
+  if (svg) {
+    return `<div class="svg-icon-box">${svg}</div>`;
+  }
+  return `<div style="font-size:72px; line-height:1;">${fallbackEmoji || '⭐'}</div>`;
+}
+
+/* ============================================================================
+   CURRICULUM DATA ("Český jazyk pro život 1 – Písmenkář")
+   ============================================================================ */
+const CURRICULUM = {
+  consonants: [
+    {
+      letter: 'L',
+      id: 'l',
+      color: '#2563eb',
+      words: [
+        { word: 'LAMPA', icon: 'lampa', emoji: '🛋️', audioId: 'slovo_lampa' },
+        { word: 'LEV',   icon: 'lev',   emoji: '🦁', audioId: 'slovo_lev' },
+        { word: 'LIST',  icon: 'list',  emoji: '🍃', audioId: 'slovo_list' },
+        { word: 'LOĎ',   icon: 'lod',   emoji: '⛵', audioId: 'slovo_lod' }
+      ]
+    },
+    {
+      letter: 'S',
+      id: 's',
+      color: '#16a34a',
+      words: [
+        { word: 'SLUNCE', icon: 'slunce', emoji: '☀️', audioId: 'slovo_slunce' },
+        { word: 'SOVA',   icon: 'sova',   emoji: '🦉', audioId: 'slovo_sova' },
+        { word: 'SÝR',    icon: 'syr',    emoji: '🧀', audioId: 'slovo_syr' },
+        { word: 'SRDCE',  icon: 'srdce',  emoji: '❤️', audioId: 'slovo_srdce' }
+      ]
+    },
+    {
+      letter: 'M',
+      id: 'm',
+      color: '#db2777',
+      words: [
+        { word: 'MÁMA',   icon: 'mama',   emoji: '👩', audioId: 'slovo_mama' },
+        { word: 'MEDVĚD', icon: 'medved', emoji: '🐻', audioId: 'slovo_medved' },
+        { word: 'MÍČ',    icon: 'mic',    emoji: '⚽', audioId: 'slovo_mic' },
+        { word: 'MOTÝL',  icon: 'motyl',  emoji: '🦋', audioId: 'slovo_motyl' }
+      ]
+    },
+    {
+      letter: 'P',
+      id: 'p',
+      color: '#ea580c',
+      words: [
+        { word: 'PES',     icon: 'pes',      emoji: '🐶', audioId: 'slovo_pes' },
+        { word: 'PAPOUŠEK',icon: 'papousek', emoji: '🦜', audioId: 'slovo_papousek' },
+        { word: 'PILA',    icon: 'pila',     emoji: '🪚', audioId: 'slovo_pila' },
+        { word: 'PRASÁTKO',icon: 'prasatko', emoji: '🐷', audioId: 'slovo_prasatko' }
+      ]
+    }
+  ],
+
+  vowels: [
+    {
+      letter: 'A',
+      id: 'a',
+      color: '#dc2626',
+      words: [
+        { word: 'AUTO',    icon: 'auto',    emoji: '🚗', audioId: 'slovo_auto' },
+        { word: 'ANANAS',  icon: 'ananas',  emoji: '🍍', audioId: 'slovo_ananas' },
+        { word: 'AKTOVKA', icon: 'aktovka', emoji: '🎒', audioId: 'slovo_aktovka' }
+      ]
+    },
+    {
+      letter: 'O',
+      id: 'o',
+      color: '#ca8a04',
+      words: [
+        { word: 'OKO',   icon: 'oko',   emoji: '👁️', audioId: 'slovo_oko' },
+        { word: 'OKNO',  icon: 'okno',  emoji: '🪟', audioId: 'slovo_okno' },
+        { word: 'OPICE', icon: 'opice', emoji: '🐒', audioId: 'slovo_opice' }
+      ]
+    },
+    {
+      letter: 'E',
+      id: 'e',
+      color: '#0891b2',
+      words: [
+        { word: 'ESKYMÁK', icon: 'eskymak', emoji: '🧊', audioId: 'slovo_eskymak' },
+        { word: 'ELF',     icon: 'elf',     emoji: '🧝', audioId: 'slovo_elf' },
+        { word: 'EMU',     icon: 'emu',     emoji: '🦤', audioId: 'slovo_emu' }
+      ]
+    },
+    {
+      letter: 'I',
+      pairLabel: 'I / Y',
+      id: 'i',
+      color: '#7c3aed',
+      words: [
+        { word: 'INDIÁN',  icon: 'indian',  emoji: '🪶', audioId: 'slovo_indian' },
+        { word: 'IGLÚ',    icon: 'iglu',    emoji: '🛖', audioId: 'slovo_iglu' },
+        { word: 'INJEKCE', icon: 'injekce', emoji: '💉', audioId: 'slovo_injekce' }
+      ]
+    },
+    {
+      letter: 'U',
+      id: 'u',
+      color: '#4f46e5',
+      words: [
+        { word: 'UCHO',  icon: 'ucho',  emoji: '👂', audioId: 'slovo_ucho' },
+        { word: 'ULITA', icon: 'ulita', emoji: '🐚', audioId: 'slovo_ulita' },
+        { word: 'UZEL',  icon: 'uzel',  emoji: '🪢', audioId: 'slovo_uzel' }
+      ]
+    }
+  ],
+
+  syllableGroups: [
+    { consonant: 'M', page: 'str. 54', syllables: ['MA', 'MO', 'ME', 'MI', 'MY', 'MU'] },
+    { consonant: 'L', page: 'str. 56', syllables: ['LA', 'LO', 'LE', 'LI', 'LY', 'LU'] },
+    { consonant: 'S', page: 'str. 57', syllables: ['SA', 'SO', 'SE', 'SI', 'SY', 'SU'] },
+    { consonant: 'P', page: 'str. 58', syllables: ['PA', 'PO', 'PE', 'PI', 'PY', 'PU'] }
+  ],
+
+  twoSyllableWords: [
+    { word: 'MÁMA', syl1: 'MÁ', syl2: 'MA', icon: 'mama', emoji: '👩', hint: 'Máma' },
+    { word: 'MÍSA', syl1: 'MÍ', syl2: 'SA', icon: 'syr', emoji: '🥣', hint: 'Mísa' },
+    { word: 'LÍPA', syl1: 'LÍ', syl2: 'PA', icon: 'list', emoji: '🌳', hint: 'Lípa' },
+    { word: 'PÍPA', syl1: 'PÍ', syl2: 'PA', icon: 'pila', emoji: '🚰', hint: 'Pípa' },
+    { word: 'SELE', syl1: 'SE', syl2: 'LE', icon: 'prasatko', emoji: '🐖', hint: 'Sele' },
+    { word: 'MASO', syl1: 'MA', syl2: 'SO', icon: 'syr', emoji: '🥩', hint: 'Maso' },
+    { word: 'MAPA', syl1: 'MA', syl2: 'PA', icon: 'auto', emoji: '🗺️', hint: 'Mapa' },
+    { word: 'LÁME', syl1: 'LÁ', syl2: 'ME', icon: 'lampa', emoji: '🪵', hint: 'Láme' },
+    { word: 'MELE', syl1: 'ME', syl2: 'LE', icon: 'medved', emoji: '⚙️', hint: 'Mele' },
+    { word: 'PÁLÍ', syl1: 'PÁ', syl2: 'LÍ', icon: 'slunce', emoji: '🌶️', hint: 'Pálí' }
+  ],
+
+  sentences: [
+    {
+      words: ['MÁMA', 'MELE', 'MASO.'],
+      icon: 'mama',
+      emoji: '👩 ⚙️ 🥩',
+      spoken: 'Máma mele maso.'
+    },
+    {
+      words: ['EMA', 'MÁ', 'MÍSU.'],
+      icon: 'aktovka',
+      emoji: '👧 🤲 🥣',
+      spoken: 'Ema má mísu.'
+    },
+    {
+      words: ['PES', 'SPÍ.'],
+      icon: 'pes',
+      emoji: '🐶 💤',
+      spoken: 'Pes spí.'
+    },
+    {
+      words: ['MÁMA', 'MÁ', 'MALÉ', 'SELE.'],
+      icon: 'prasatko',
+      emoji: '👩 🤲 🐖',
+      spoken: 'Máma má malé sele.'
+    }
+  ],
+
+  alphabetChallenges: [
+    { word: 'MÁMA', icon: 'mama', emoji: '👩' },
+    { word: 'MÍSA', icon: 'syr', emoji: '🥣' },
+    { word: 'PES',  icon: 'pes', emoji: '🐶' },
+    { word: 'LES',  icon: 'list', emoji: '🌲' },
+    { word: 'MASO', icon: 'syr', emoji: '🥩' },
+    { word: 'LÍPA', icon: 'list', emoji: '🌳' },
+    { word: 'SELE', icon: 'prasatko', emoji: '🐖' },
+    { word: 'MAPA', icon: 'auto', emoji: '🗺️' },
+    { word: 'SŮL',  icon: 'slunce', emoji: '🧂' }
+  ]
+};
+
+/* ============================================================================
+   LETTER STROKE GEOMETRY FOR CANVAS TRACING
+   ============================================================================ */
+const LETTER_STROKES = {
+  'L': [
+    [[90, 50], [90, 280], [250, 280]]
+  ],
+  'S': [
+    [[235, 85], [190, 50], [125, 55], [95, 95], [120, 145], [215, 180], [240, 235], [195, 280], [125, 275], [95, 240]]
+  ],
+  'M': [
+    [[65, 280], [65, 55], [170, 185], [275, 55], [275, 280]]
+  ],
+  'P': [
+    [[95, 280], [95, 55], [205, 55], [245, 90], [245, 140], [205, 175], [95, 175]]
+  ],
+  'A': [
+    [[75, 280], [170, 55], [265, 280]],
+    [[110, 200], [230, 200]]
+  ],
+  'O': [
+    [[170, 50], [100, 80], [75, 165], [100, 250], [170, 280], [240, 250], [265, 165], [240, 80], [170, 50]]
+  ],
+  'E': [
+    [[240, 55], [95, 55], [95, 280], [240, 280]],
+    [[95, 165], [215, 165]]
+  ],
+  'I': [
+    [[115, 55], [115, 280]],
+    [[190, 55], [235, 165], [280, 55]],
+    [[235, 165], [235, 280]]
+  ],
+  'U': [
+    [[85, 55], [85, 215], [120, 270], [170, 280], [220, 270], [255, 215], [255, 55]]
+  ]
+};
+
+/* ============================================================================
+   AUDIO ENGINE
+   ============================================================================ */
+const AudioEngine = {
+  shortPrompts: true,
+  useMp3: false,
+  selectedVoiceURI: null,
+  voices: [],
+  db: null,
+  customBlobs: {},
+
+  phonemePresets: {
+    'L': { active: 'lll', options: ['lll', 'l.', 'le', 'l'] },
+    'S': { active: 'sss', options: ['sss', 's.', 'ss', 's'] },
+    'M': { active: 'mmm', options: ['mmm', 'm.', 'mm', 'm'] },
+    'P': { active: 'p.',  options: ['p.', 'p!', 'pə', 'pe', 'p'] },
+    'A': { active: 'a',   options: ['a', 'aa', 'á'] },
+    'O': { active: 'o',   options: ['o', 'oo', 'ó'] },
+    'E': { active: 'e',   options: ['e', 'ee', 'é'] },
+    'I': { active: 'i',   options: ['i', 'ii', 'í'] },
+    'Y': { active: 'i',   options: ['i', 'y', 'í'] },
+    'U': { active: 'u',   options: ['u', 'uu', 'ú'] }
+  },
+
+  init() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('pismenkar_audio_cfg') || '{}');
+      if (typeof saved.shortPrompts === 'boolean') this.shortPrompts = saved.shortPrompts;
+      if (typeof saved.useMp3 === 'boolean') this.useMp3 = saved.useMp3;
+      if (saved.presets) {
+        for (const k of Object.keys(saved.presets)) {
+          if (this.phonemePresets[k]) this.phonemePresets[k].active = saved.presets[k];
+        }
+      }
+      if (saved.voiceURI) this.selectedVoiceURI = saved.voiceURI;
+    } catch (e) {}
+
+    this.initIndexedDB();
+
+    if ('speechSynthesis' in window) {
+      const loadVoices = () => {
+        const all = window.speechSynthesis.getVoices() || [];
+        this.voices = all.filter(v => v.lang && (v.lang.toLowerCase().includes('cs') || v.lang.toLowerCase().includes('cz') || v.lang.toLowerCase().includes('sk')));
+        if (this.voices.length === 0) this.voices = all;
+        ParentModal.populateVoiceSelect();
+      };
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  },
+
+  saveConfig() {
+    const presets = {};
+    for (const k of Object.keys(this.phonemePresets)) {
+      presets[k] = this.phonemePresets[k].active;
+    }
+    localStorage.setItem('pismenkar_audio_cfg', JSON.stringify({
+      shortPrompts: this.shortPrompts,
+      useMp3: this.useMp3,
+      presets,
+      voiceURI: this.selectedVoiceURI
+    }));
+  },
+
+  setShortPrompts(val) {
+    this.shortPrompts = val;
+    this.saveConfig();
+  },
+
+  setUseMp3(val) {
+    this.useMp3 = val;
+    this.saveConfig();
+  },
+
+  selectVoice(uri) {
+    this.selectedVoiceURI = uri;
+    this.saveConfig();
+  },
+
+  initIndexedDB() {
+    if (!window.indexedDB) return;
+    const req = indexedDB.open('PismenkarAudioDB', 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('recordings')) {
+        db.createObjectStore('recordings');
+      }
+    };
+    req.onsuccess = (e) => {
+      this.db = e.target.result;
+      this.loadAllCustomRecordings();
+    };
+  },
+
+  loadAllCustomRecordings() {
+    if (!this.db) return;
+    const tx = this.db.transaction('recordings', 'readonly');
+    const store = tx.objectStore('recordings');
+    const req = store.openCursor();
+    req.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        const blob = cursor.value;
+        this.customBlobs[cursor.key] = URL.createObjectURL(blob);
+        cursor.continue();
+      } else {
+        ParentModal.refreshUI();
+      }
+    };
+  },
+
+  saveCustomRecording(id, blob) {
+    this.customBlobs[id] = URL.createObjectURL(blob);
+    if (!this.db) return;
+    const tx = this.db.transaction('recordings', 'readwrite');
+    tx.objectStore('recordings').put(blob, id);
+    tx.oncomplete = () => ParentModal.refreshUI();
+  },
+
+  deleteCustomRecording(id) {
+    delete this.customBlobs[id];
+    if (!this.db) return;
+    const tx = this.db.transaction('recordings', 'readwrite');
+    tx.objectStore('recordings').delete(id);
+    tx.oncomplete = () => ParentModal.refreshUI();
+  },
+
+  playItem(id, fallbackText, opts = {}) {
+    if (this.customBlobs[id]) {
+      const audio = new Audio(this.customBlobs[id]);
+      audio.play().catch(() => this.speakText(fallbackText, opts));
+      return;
+    }
+
+    if (this.useMp3 && id) {
+      const audio = new Audio(`audio/${id}.mp3`);
+      audio.onerror = () => this.speakText(fallbackText, opts);
+      audio.play().catch(() => this.speakText(fallbackText, opts));
+      return;
+    }
+
+    this.speakText(fallbackText, opts);
+  },
+
+  speakPhoneme(letter) {
+    const clean = letter.toUpperCase().split('/')[0].trim();
+    const id = `hlaska_${clean.toLowerCase()}`;
+    const presetObj = this.phonemePresets[clean];
+    const spokenText = presetObj ? presetObj.active : clean.toLowerCase();
+
+    const isPlosive = clean === 'P';
+    this.playItem(id, spokenText, {
+      rate: isPlosive ? 1.15 : 0.92,
+      pitch: 1.05
+    });
+  },
+
+  speakSyllable(syl) {
+    const clean = syl.toUpperCase();
+    const id = `slabika_${clean.toLowerCase()}`;
+    this.playItem(id, clean.toLowerCase(), { rate: 0.9 });
+  },
+
+  speakWord(word, customId = null) {
+    const id = customId || `slovo_${word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}`;
+    this.playItem(id, word.toLowerCase(), { rate: 0.92 });
+  },
+
+  speakPraise() {
+    const praises = [
+      { id: 'pochvala_vyborne', text: 'Výborně!' },
+      { id: 'pochvala_skvele', text: 'Skvěle!' },
+      { id: 'pochvala_super', text: 'Super práce!' }
+    ];
+    const p = praises[Math.floor(Math.random() * praises.length)];
+    this.playItem(p.id, p.text, { rate: 1.0, pitch: 1.1 });
+  },
+
+  speakText(text, opts = {}) {
+    if (!('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'cs-CZ';
+      utter.rate = opts.rate || 0.95;
+      utter.pitch = opts.pitch || 1.02;
+
+      if (this.selectedVoiceURI) {
+        const found = this.voices.find(v => v.voiceURI === this.selectedVoiceURI);
+        if (found) utter.voice = found;
+      } else {
+        const preferred = this.voices.find(v =>
+          v.lang.toLowerCase().includes('cs') &&
+          (v.name.includes('Google') || v.name.includes('Zuzana') || v.name.includes('Vlasta') || v.name.includes('Iveta'))
+        ) || this.voices.find(v => v.lang.toLowerCase().includes('cs'));
+        if (preferred) utter.voice = preferred;
+      }
+
+      window.speechSynthesis.speak(utter);
+    } catch (e) {}
+  },
+
+  playTone(type = 'success') {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+      if (type === 'success') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.09);
+        osc.frequency.setValueAtTime(783.99, now + 0.18);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+        osc.start(now);
+        osc.stop(now + 0.42);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(175, now + 0.12);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'pop') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(660, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+        osc.start(now);
+        osc.stop(now + 0.09);
+      }
+    } catch (e) {}
+  }
+};
+
+/* ============================================================================
+   PARENT DIAGNOSTIC & MICROPHONE RECORDER MODAL
+   ============================================================================ */
+const ParentModal = {
+  mediaRecorder: null,
+  recordingId: null,
+  chunks: [],
+
+  open() {
+    document.getElementById('chk-short-prompts').checked = AudioEngine.shortPrompts;
+    document.getElementById('chk-use-mp3').checked = AudioEngine.useMp3;
+    this.populateVoiceSelect();
+    this.refreshUI();
+    document.getElementById('parent-modal').classList.add('open');
+  },
+
+  close() {
+    if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+      this.mediaRecorder.stop();
+    }
+    document.getElementById('parent-modal').classList.remove('open');
+  },
+
+  populateVoiceSelect() {
+    const sel = document.getElementById('voice-select');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Automatický český hlas (doporučeno)</option>';
+    AudioEngine.voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.voiceURI;
+      opt.textContent = `${v.name} (${v.lang})`;
+      if (v.voiceURI === AudioEngine.selectedVoiceURI) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  },
+
+  refreshUI() {
+    const listEl = document.getElementById('phoneme-tuner-list');
+    if (!listEl) return;
+
+    const letters = ['L', 'S', 'M', 'P', 'A', 'O', 'E', 'I', 'U'];
+    listEl.innerHTML = letters.map(letter => {
+      const id = `hlaska_${letter.toLowerCase()}`;
+      const preset = AudioEngine.phonemePresets[letter];
+      const hasCustom = !!AudioEngine.customBlobs[id];
+      const isRec = this.recordingId === id;
+
+      return `
+        <div class="phoneme-tuner-row">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <button class="btn btn-primary" style="min-width:64px; padding:10px;" onclick="AudioEngine.speakPhoneme('${letter}')">
+              🔊 ${letter}
+            </button>
+            <div>
+              <div style="font-weight:800; font-size:15px;">Hláska ${letter} <span style="color:#64748b; font-weight:600;">(soubor: <code>${id}.mp3</code>)</span></div>
+              <div style="font-size:12px; color:${hasCustom ? '#059669' : '#64748b'}; font-weight:700;">
+                ${hasCustom ? '✅ Vlastní nahrávka z mikrofonu' : 'Syntéza TTS'}
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            ${preset.options.map(opt => `
+              <button class="preset-chip ${preset.active === opt && !hasCustom ? 'active' : ''}"
+                onclick="ParentModal.selectPreset('${letter}', '${opt}')">
+                „${opt}“
+              </button>
+            `).join('')}
+
+            <button class="rec-btn ${isRec ? 'recording' : ''}" onclick="ParentModal.toggleRecord('${id}')">
+              ${isRec ? '⏹ Stop' : '🎙 Nahrát'}
+            </button>
+            ${hasCustom ? `<button class="preset-chip" style="color:#dc2626;" onclick="AudioEngine.deleteCustomRecording('${id}')">✖ Smazat</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    this.renderAllItemsCatalog();
+  },
+
+  selectPreset(letter, opt) {
+    AudioEngine.phonemePresets[letter].active = opt;
+    AudioEngine.saveConfig();
+    this.refreshUI();
+    AudioEngine.speakPhoneme(letter);
+  },
+
+  async toggleRecord(id) {
+    if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+      this.mediaRecorder.stop();
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.chunks = [];
+      this.recordingId = id;
+      this.mediaRecorder = new MediaRecorder(stream);
+
+      this.mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) this.chunks.push(e.data);
+      };
+
+      this.mediaRecorder.onstop = () => {
+        const blob = new Blob(this.chunks, { type: 'audio/webm' });
+        const targetId = this.recordingId;
+        this.recordingId = null;
+        stream.getTracks().forEach(t => t.stop());
+        AudioEngine.saveCustomRecording(targetId, blob);
+        AudioEngine.playItem(targetId, '');
+      };
+
+      this.mediaRecorder.start();
+      this.refreshUI();
+    } catch (err) {
+      alert('Nepodařilo se získat přístup k mikrofonu.');
+    }
+  },
+
+  renderAllItemsCatalog() {
+    const container = document.getElementById('all-audio-items-list');
+    if (!container) return;
+
+    const allItems = [];
+    [...CURRICULUM.consonants, ...CURRICULUM.vowels].forEach(c => {
+      c.words.forEach(w => allItems.push({ id: w.audioId, label: `Slovo: ${w.word}`, text: w.word }));
+    });
+    CURRICULUM.syllableGroups.forEach(g => {
+      g.syllables.forEach(s => allItems.push({ id: `slabika_${s.toLowerCase()}`, label: `Slabika: ${s}`, text: s }));
+    });
+
+    container.innerHTML = allItems.map(item => {
+      const hasCustom = !!AudioEngine.customBlobs[item.id];
+      const isRec = this.recordingId === item.id;
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; border-bottom:1px solid #e2e8f0;">
+          <div>
+            <strong>${item.label}</strong>
+            <code style="margin-left:8px; color:#64748b;">audio/${item.id}.mp3</code>
+            ${hasCustom ? '<span style="color:#059669; font-weight:800; margin-left:6px;">● Nahráno</span>' : ''}
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="preset-chip" onclick="AudioEngine.playItem('${item.id}', '${item.text}')">▶</button>
+            <button class="rec-btn ${isRec ? 'recording' : ''}" onclick="ParentModal.toggleRecord('${item.id}')">
+              ${isRec ? '⏹' : '🎙'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+};
+
+/* ============================================================================
+   MAIN APPLICATION CONTROLLER
+   ============================================================================ */
+const App = {
+  stars: {},
+
+  init() {
+    this.loadStars();
+    AudioEngine.init();
+    this.goHome();
+  },
+
+  loadStars() {
+    try {
+      this.stars = JSON.parse(localStorage.getItem('pismenkar_stars_v2') || '{}');
+    } catch (e) {
+      this.stars = {};
+    }
+    this.updateStarBadge();
+  },
+
+  awardStar(key) {
+    this.stars[key] = true;
+    localStorage.setItem('pismenkar_stars_v2', JSON.stringify(this.stars));
+    this.updateStarBadge();
+  },
+
+  resetAllProgress() {
+    this.stars = {};
+    localStorage.removeItem('pismenkar_stars_v2');
+    this.updateStarBadge();
+    ParentModal.close();
+    this.goHome();
+  },
+
+  updateStarBadge() {
+    const count = Object.values(this.stars).filter(Boolean).length;
+    const el = document.getElementById('star-count-text');
+    if (el) el.textContent = count;
+  },
+
+  showCelebration(onContinue) {
+    this.celebrationCallback = onContinue;
+    AudioEngine.playTone('success');
+    AudioEngine.speakPraise();
+    document.getElementById('celebration-overlay').classList.add('show');
+  },
+
+  closeCelebration() {
+    document.getElementById('celebration-overlay').classList.remove('show');
+    if (this.celebrationCallback) {
+      const cb = this.celebrationCallback;
+      this.celebrationCallback = null;
+      cb();
+    }
+  },
+
+  goHome() {
+    document.getElementById('btn-home-nav').style.display = 'none';
+    const view = document.getElementById('main-view');
+
+    view.innerHTML = `
+      <div class="chapters-grid">
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">1</div>
+              <div>
+                <h2 class="chapter-title">Souhlásky L, S, M, P</h2>
+                <div class="chapter-pages">Učebnice str. 24–36 • 6 kroků</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Seznámení, SVG piktogramy, hledání písmen a obtahování prstem:
+            </p>
+            <div class="letter-pills">
+              ${CURRICULUM.consonants.map(item => {
+                const done = !!this.stars[`letter_${item.letter}`];
+                return `
+                  <button class="letter-pill ${done ? 'completed' : ''}" onclick="LetterLesson.start('${item.letter}')">
+                    ${item.letter}
+                    ${done ? '<span class="pill-star">⭐</span>' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="LetterLesson.start('L')">
+            ▶ Spustit kapitolu 1
+          </button>
+        </div>
+
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#ec4899,#be185d);">2</div>
+              <div>
+                <h2 class="chapter-title">Samohlásky A, O, E, I/Y, U</h2>
+                <div class="chapter-pages">Učebnice str. 42–52 + Shrnutí</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Samohlásky a následné souhrnné procvičení všech 9 písmen:
+            </p>
+            <div class="letter-pills">
+              ${CURRICULUM.vowels.map(item => {
+                const done = !!this.stars[`letter_${item.letter}`];
+                return `
+                  <button class="letter-pill ${done ? 'completed' : ''}" onclick="LetterLesson.start('${item.letter}')">
+                    ${item.pairLabel || item.letter}
+                    ${done ? '<span class="pill-star">⭐</span>' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="flex:1;" onclick="SummaryNineGame.start()">
+              🏆 Shrnutí 9 písmen ${this.stars['summary_9'] ? '⭐' : ''}
+            </button>
+          </div>
+        </div>
+
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">3</div>
+              <div>
+                <h2 class="chapter-title">Otevřené slabiky</h2>
+                <div class="chapter-pages">Učebnice str. 54–60 • M, L, S, P</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Skládání a čtení otevřených slabik (MA, MO, ME, LA, SE...):
+            </p>
+            <div class="letter-pills">
+              ${CURRICULUM.syllableGroups.map(g => {
+                const done = !!this.stars[`syl_${g.consonant}`];
+                return `
+                  <button class="letter-pill ${done ? 'completed' : ''}" onclick="SyllableGame.start('${g.consonant}')">
+                    ${g.consonant}+
+                    ${done ? '<span class="pill-star">⭐</span>' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          <button class="btn btn-primary" style="background:#8b5cf6; box-shadow:0 6px 0 #5b21b6;" onclick="SyllableGame.start('M')">
+            🚂 Trénovat slabiky
+          </button>
+        </div>
+
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#10b981,#047857);">4</div>
+              <div>
+                <h2 class="chapter-title">Dvouslabičná slova</h2>
+                <div class="chapter-pages">Učebnice str. 62–64 • MÁ-MA, MÍ-SA</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Skládání a čtení prvních celých slov se spolehlivými SVG ikonami:
+            </p>
+          </div>
+          <button class="btn btn-success" onclick="TwoSyllableWordGame.start()">
+            🧩 Skládat slova ${this.stars['words_2syl'] ? '⭐' : ''}
+          </button>
+        </div>
+
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#f59e0b,#d97706);">5</div>
+              <div>
+                <h2 class="chapter-title">Seznámení s větou</h2>
+                <div class="chapter-pages">Učebnice str. 72 • Velké písmeno a tečka</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Poskládej slova do věty podle poslechu a obrázku:
+            </p>
+          </div>
+          <button class="btn btn-secondary" onclick="SentenceGame.start()">
+            📖 Stavět věty ${this.stars['sentences_done'] ? '⭐' : ''}
+          </button>
+        </div>
+
+        <div class="chapter-card">
+          <div>
+            <div class="chapter-header">
+              <div class="chapter-badge" style="background:linear-gradient(135deg,#06b6d4,#0e7490);">6</div>
+              <div>
+                <h2 class="chapter-title">Skládací abeceda</h2>
+                <div class="chapter-pages">Učebnice str. 78 • Magnetická tabule</div>
+              </div>
+            </div>
+            <p style="font-size:14px; color:#475569; margin:12px 0;">
+              Volné i vedené skládání slov z kartiček písmen s hlasovým přečtením:
+            </p>
+          </div>
+          <button class="btn btn-primary" style="background:#0891b2; box-shadow:0 6px 0 #155e75;" onclick="FoldingAlphabetGame.start()">
+            🔤 Otevřít skládací abecedu ${this.stars['alphabet_done'] ? '⭐' : ''}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+};
+
+/* ============================================================================
+   LETTER LESSON CONTROLLER (6 steps)
+   ============================================================================ */
+const LetterLesson = {
+  item: null,
+  step: 1,
+
+  start(letterKey) {
+    const all = [...CURRICULUM.consonants, ...CURRICULUM.vowels];
+    this.item = all.find(x => x.letter === letterKey) || all[0];
+    this.step = 1;
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    this.renderStep();
+  },
+
+  renderProgressDots() {
+    let html = '<div class="step-progress">';
+    for (let i = 1; i <= 6; i++) {
+      const cls = i < this.step ? 'done' : (i === this.step ? 'active' : '');
+      html += `<div class="step-dot ${cls}"></div>`;
+    }
+    html += '</div>';
+    return html;
+  },
+
+  nextStep() {
+    if (this.step < 6) {
+      this.step++;
+      this.renderStep();
+    } else {
+      App.awardStar(`letter_${this.item.letter}`);
+      App.showCelebration(() => App.goHome());
+    }
+  },
+
+  renderStep() {
+    if (this.step === 1) this.renderStep1Intro();
+    else if (this.step === 2 || this.step === 3) this.renderStepPictureQuiz(this.step === 3);
+    else if (this.step === 4 || this.step === 5) this.renderStepFindLetter(this.step === 5);
+    else if (this.step === 6) this.renderStepTracing();
+  },
+
+  renderStep1Intro() {
+    const view = document.getElementById('main-view');
+    const displayChar = this.item.pairLabel || this.item.letter;
+    const threeWords = this.item.words.slice(0, 3);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        ${this.renderProgressDots()}
+
+        <div class="giant-letter-card" style="background:linear-gradient(145deg, ${this.item.color}, #1e1b4b);"
+             onclick="AudioEngine.speakPhoneme('${this.item.letter}')">
+          ${displayChar}
+          <div class="speaker-corner">🔊</div>
+        </div>
+
+        <div class="cards-grid-3">
+          ${threeWords.map(w => {
+            const firstChar = w.word.charAt(0);
+            const restChars = w.word.slice(1);
+            return `
+              <div class="pic-card" onclick="LetterLesson.tapIntroWord(this, '${w.word}', '${w.audioId}')">
+                ${renderSvgIcon(w.icon, w.emoji)}
+                <div class="pic-word"><span class="highlight-char">${firstChar}</span>${restChars}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <button class="btn btn-success" style="font-size:24px; padding:16px 42px;" onclick="LetterLesson.nextStep()">
+          Dále ➔
+        </button>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakPhoneme(this.item.letter), 250);
+  },
+
+  tapIntroWord(cardEl, word, audioId) {
+    cardEl.classList.remove('correct');
+    void cardEl.offsetWidth;
+    cardEl.classList.add('correct');
+    AudioEngine.speakWord(word, audioId);
+  },
+
+  renderStepPictureQuiz(isSecondRound) {
+    const view = document.getElementById('main-view');
+    const correctPool = this.item.words;
+    const correctWord = correctPool[isSecondRound ? 1 % correctPool.length : 0];
+
+    const allOtherWords = [];
+    [...CURRICULUM.consonants, ...CURRICULUM.vowels].forEach(c => {
+      if (c.letter !== this.item.letter) {
+        c.words.forEach(w => allOtherWords.push(w));
+      }
+    });
+    const shuffledOthers = allOtherWords.sort(() => Math.random() - 0.5).slice(0, 2);
+    const options = [correctWord, ...shuffledOthers].sort(() => Math.random() - 0.5);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        ${this.renderProgressDots()}
+
+        <div style="display:flex; align-items:center; gap:18px;">
+          <button class="btn-speaker-giant" onclick="AudioEngine.speakPhoneme('${this.item.letter}')">
+            🔊
+          </button>
+          <div style="font-size:28px; font-weight:900; color:${this.item.color};">
+            Co začíná hláskou ${this.item.letter}?
+          </div>
+        </div>
+
+        <div class="cards-grid-3">
+          ${options.map(w => `
+            <div class="pic-card" onclick="LetterLesson.checkPictureAnswer(this, ${w.word === correctWord.word}, '${w.word}', '${w.audioId}')">
+              ${renderSvgIcon(w.icon, w.emoji)}
+              <div class="pic-word">${w.word}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="height:10px;"></div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakPhoneme(this.item.letter), 250);
+  },
+
+  checkPictureAnswer(cardEl, isCorrect, word, audioId) {
+    if (cardEl.dataset.locked === '1') return;
+    if (isCorrect) {
+      cardEl.dataset.locked = '1';
+      cardEl.classList.add('correct');
+      AudioEngine.playTone('success');
+      AudioEngine.speakWord(word, audioId);
+      setTimeout(() => this.nextStep(), 1150);
+    } else {
+      cardEl.classList.add('wrong');
+      AudioEngine.playTone('error');
+      setTimeout(() => cardEl.classList.remove('wrong'), 500);
+    }
+  },
+
+  renderStepFindLetter(isSecondRound) {
+    const view = document.getElementById('main-view');
+    const targetChar = this.item.letter === 'I' && isSecondRound ? 'Y' : this.item.letter;
+
+    const allLetters = ['L', 'S', 'M', 'P', 'A', 'O', 'E', 'I', 'Y', 'U'].filter(l => l !== targetChar);
+    const distractors = allLetters.sort(() => Math.random() - 0.5).slice(0, 5);
+    const tiles = [targetChar, ...distractors].sort(() => Math.random() - 0.5);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        ${this.renderProgressDots()}
+
+        <div style="display:flex; align-items:center; gap:18px;">
+          <button class="btn-speaker-giant" onclick="AudioEngine.speakPhoneme('${this.item.letter}')">
+            🔊
+          </button>
+          <div style="font-size:32px; font-weight:900; color:#334155;">
+            Najdi písmeno: ${targetChar}
+          </div>
+        </div>
+
+        <div class="letter-grid-6">
+          ${tiles.map(ch => `
+            <div class="letter-tile" onclick="LetterLesson.checkLetterTile(this, '${ch}', '${targetChar}')">
+              ${ch}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakPhoneme(this.item.letter), 250);
+  },
+
+  checkLetterTile(tileEl, ch, targetChar) {
+    if (tileEl.dataset.locked === '1') return;
+    if (ch === targetChar) {
+      tileEl.dataset.locked = '1';
+      tileEl.classList.add('correct');
+      AudioEngine.playTone('success');
+      AudioEngine.speakPhoneme(targetChar);
+      setTimeout(() => this.nextStep(), 950);
+    } else {
+      tileEl.classList.add('wrong');
+      AudioEngine.playTone('error');
+      setTimeout(() => tileEl.classList.remove('wrong'), 450);
+    }
+  },
+
+  renderStepTracing() {
+    const view = document.getElementById('main-view');
+    const displayChar = this.item.pairLabel || this.item.letter;
+
+    view.innerHTML = `
+      <div class="stage-box">
+        ${this.renderProgressDots()}
+
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center;">
+          <button class="btn btn-light" onclick="AudioEngine.speakPhoneme('${this.item.letter}')">
+            🔊 ${displayChar}
+          </button>
+          <span style="font-size:22px; font-weight:900;">☝️ Obtáhni písmeno prstem</span>
+          <button class="btn btn-light" onclick="TracingController.clearUserDrawing()">
+            🔄 Znovu
+          </button>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="trace-template-canvas" width="340" height="340"></canvas>
+          <canvas id="trace-user-canvas" width="340" height="340"></canvas>
+        </div>
+
+        <div class="coverage-meter">
+          <span style="font-size:22px;">✏️</span>
+          <div class="coverage-bar-bg">
+            <div class="coverage-bar-fill" id="trace-progress-bar"></div>
+          </div>
+          <strong id="trace-progress-text" style="min-width:52px; text-align:right;">0 %</strong>
+        </div>
+      </div>
+    `;
+
+    TracingController.init(this.item.letter, () => {
+      this.nextStep();
+    });
+  }
+};
+
+/* ============================================================================
+   CANVAS FINGER TRACING CONTROLLER
+   ============================================================================ */
+const TracingController = {
+  letter: 'L',
+  templateCanvas: null,
+  userCanvas: null,
+  tCtx: null,
+  uCtx: null,
+  isDrawing: false,
+  completed: false,
+  onComplete: null,
+  checkpoints: [],
+
+  init(letter, onComplete) {
+    this.letter = letter;
+    this.onComplete = onComplete;
+    this.completed = false;
+    this.isDrawing = false;
+
+    this.templateCanvas = document.getElementById('trace-template-canvas');
+    this.userCanvas = document.getElementById('trace-user-canvas');
+    this.tCtx = this.templateCanvas.getContext('2d');
+    this.uCtx = this.userCanvas.getContext('2d');
+
+    this.buildCheckpoints();
+    this.drawTemplate();
+    this.bindEvents();
+  },
+
+  buildCheckpoints() {
+    this.checkpoints = [];
+    const strokes = LETTER_STROKES[this.letter] || LETTER_STROKES['L'];
+
+    strokes.forEach(poly => {
+      for (let i = 0; i < poly.length - 1; i++) {
+        const [x1, y1] = poly[i];
+        const [x2, y2] = poly[i + 1];
+        const dist = Math.hypot(x2 - x1, y2 - y1);
+        const steps = Math.max(4, Math.floor(dist / 14));
+        for (let s = 0; s <= steps; s++) {
+          const t = s / steps;
+          this.checkpoints.push({
+            x: x1 + (x2 - x1) * t,
+            y: y1 + (y2 - y1) * t,
+            hit: false
+          });
+        }
+      }
+    });
+  },
+
+  drawTemplate() {
+    const ctx = this.tCtx;
+    ctx.clearRect(0, 0, 340, 340);
+    const strokes = LETTER_STROKES[this.letter] || LETTER_STROKES['L'];
+
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 46;
+    ctx.strokeStyle = '#e2e8f0';
+
+    strokes.forEach(poly => {
+      ctx.beginPath();
+      poly.forEach(([x, y], idx) => {
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+
+    ctx.lineWidth = 4;
+    ctx.setLineDash([8, 10]);
+    ctx.strokeStyle = '#94a3b8';
+    strokes.forEach(poly => {
+      ctx.beginPath();
+      poly.forEach(([x, y], idx) => {
+        if (idx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    strokes.forEach(poly => {
+      const [sx, sy] = poly[0];
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 14, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  },
+
+  clearUserDrawing() {
+    this.uCtx.clearRect(0, 0, 340, 340);
+    this.checkpoints.forEach(cp => cp.hit = false);
+    this.updateMeter(0);
+  },
+
+  getPos(e) {
+    const rect = this.userCanvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (this.userCanvas.width / rect.width),
+      y: (clientY - rect.top) * (this.userCanvas.height / rect.height)
+    };
+  },
+
+  bindEvents() {
+    const start = (e) => {
+      if (this.completed) return;
+      e.preventDefault();
+      this.isDrawing = true;
+      const pos = this.getPos(e);
+      this.uCtx.lineCap = 'round';
+      this.uCtx.lineJoin = 'round';
+      this.uCtx.lineWidth = 40;
+      this.uCtx.strokeStyle = '#4f46e5';
+      this.uCtx.beginPath();
+      this.uCtx.moveTo(pos.x, pos.y);
+      this.markNearCheckpoints(pos.x, pos.y);
+    };
+
+    const move = (e) => {
+      if (!this.isDrawing || this.completed) return;
+      e.preventDefault();
+      const pos = this.getPos(e);
+      this.uCtx.lineTo(pos.x, pos.y);
+      this.uCtx.stroke();
+      this.uCtx.beginPath();
+      this.uCtx.moveTo(pos.x, pos.y);
+      this.markNearCheckpoints(pos.x, pos.y);
+    };
+
+    const end = (e) => {
+      if (!this.isDrawing) return;
+      e.preventDefault();
+      this.isDrawing = false;
+    };
+
+    this.userCanvas.onmousedown = start;
+    this.userCanvas.onmousemove = move;
+    window.onmouseup = end;
+
+    this.userCanvas.ontouchstart = start;
+    this.userCanvas.ontouchmove = move;
+    this.userCanvas.ontouchend = end;
+  },
+
+  markNearCheckpoints(x, y) {
+    let hitCount = 0;
+    this.checkpoints.forEach(cp => {
+      if (!cp.hit && Math.hypot(cp.x - x, cp.y - y) < 34) {
+        cp.hit = true;
+      }
+      if (cp.hit) hitCount++;
+    });
+
+    const pct = Math.min(100, Math.round((hitCount / this.checkpoints.length) * 100));
+    this.updateMeter(pct);
+
+    if (pct >= 82 && !this.completed) {
+      this.completed = true;
+      setTimeout(() => {
+        if (this.onComplete) this.onComplete();
+      }, 350);
+    }
+  },
+
+  updateMeter(pct) {
+    const bar = document.getElementById('trace-progress-bar');
+    const txt = document.getElementById('trace-progress-text');
+    if (bar) bar.style.width = `${pct}%`;
+    if (txt) txt.textContent = `${pct} %`;
+  }
+};
+
+/* ============================================================================
+   SUMMARY OF ALL 9 LETTERS
+   ============================================================================ */
+const SummaryNineGame = {
+  round: 0,
+  totalRounds: 6,
+  questions: [],
+
+  start() {
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    const all9 = [...CURRICULUM.consonants, ...CURRICULUM.vowels];
+    this.questions = [...all9].sort(() => Math.random() - 0.5).slice(0, this.totalRounds);
+    this.round = 0;
+    this.renderRound();
+  },
+
+  renderRound() {
+    const view = document.getElementById('main-view');
+    const current = this.questions[this.round];
+    const all9 = [...CURRICULUM.consonants, ...CURRICULUM.vowels];
+    const distractors = all9.filter(x => x.letter !== current.letter).sort(() => Math.random() - 0.5).slice(0, 5);
+    const choices = [current, ...distractors].sort(() => Math.random() - 0.5);
+    const sampleWord = current.words[0];
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div class="step-progress">
+          ${this.questions.map((_, idx) => `<div class="step-dot ${idx < this.round ? 'done' : (idx === this.round ? 'active' : '')}"></div>`).join('')}
+        </div>
+
+        <div style="display:flex; align-items:center; gap:20px;">
+          <button class="btn-speaker-giant" onclick="AudioEngine.speakPhoneme('${current.letter}')">
+            🔊
+          </button>
+          <div class="pic-card" style="min-height:140px; padding:12px 24px;" onclick="AudioEngine.speakWord('${sampleWord.word}', '${sampleWord.audioId}')">
+            ${renderSvgIcon(sampleWord.icon, sampleWord.emoji)}
+          </div>
+        </div>
+
+        <div class="letter-grid-6">
+          ${choices.map(ch => `
+            <div class="letter-tile" onclick="SummaryNineGame.check(this, '${ch.letter}', '${current.letter}')">
+              ${ch.pairLabel || ch.letter}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakPhoneme(current.letter), 250);
+  },
+
+  check(el, picked, target) {
+    if (el.dataset.locked === '1') return;
+    if (picked === target) {
+      el.dataset.locked = '1';
+      el.classList.add('correct');
+      AudioEngine.playTone('success');
+      AudioEngine.speakPhoneme(target);
+      setTimeout(() => {
+        this.round++;
+        if (this.round < this.totalRounds) this.renderRound();
+        else {
+          App.awardStar('summary_9');
+          App.showCelebration(() => App.goHome());
+        }
+      }, 900);
+    } else {
+      el.classList.add('wrong');
+      AudioEngine.playTone('error');
+      setTimeout(() => el.classList.remove('wrong'), 450);
+    }
+  }
+};
+
+/* ============================================================================
+   SYLLABLE GAME
+   ============================================================================ */
+const SyllableGame = {
+  group: null,
+  step: 0,
+
+  start(consonantKey) {
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    this.group = CURRICULUM.syllableGroups.find(g => g.consonant === consonantKey) || CURRICULUM.syllableGroups[0];
+    this.step = 0;
+    this.renderStep();
+  },
+
+  renderStep() {
+    if (this.step === 0) this.renderIntroSlide();
+    else this.renderQuizRound();
+  },
+
+  renderIntroSlide() {
+    const view = document.getElementById('main-view');
+    const c = this.group.consonant;
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+          ${CURRICULUM.syllableGroups.map(g => `
+            <button class="btn ${g.consonant === c ? 'btn-primary' : 'btn-light'}" onclick="SyllableGame.start('${g.consonant}')">
+              Slabiky se ${g.consonant}
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="syllable-stage">
+          <div class="syl-block syl-consonant" onclick="AudioEngine.speakPhoneme('${c}')">${c}</div>
+          <div style="font-size:48px; font-weight:900; color:#64748b;">+</div>
+          <div class="syl-block syl-vowel" id="active-vowel-box">A</div>
+          <div style="font-size:48px; font-weight:900; color:#64748b;">=</div>
+          <div class="syl-block syl-merged" id="active-merged-box">${c}A</div>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:12px 0;">
+          ${this.group.syllables.map(syl => {
+            const v = syl.slice(1);
+            return `
+              <button class="letter-pill" style="min-width:96px; height:80px; font-size:34px;"
+                      onclick="SyllableGame.playSyllableDemo('${c}', '${v}', '${syl}')">
+                ${syl}
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        <button class="btn btn-success" style="font-size:22px; padding:16px 38px;" onclick="SyllableGame.step = 1; SyllableGame.renderStep();">
+          Hrát kvíz se slabikami ➔
+        </button>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakSyllable(`${c}A`), 250);
+  },
+
+  playSyllableDemo(c, v, syl) {
+    const vBox = document.getElementById('active-vowel-box');
+    const mBox = document.getElementById('active-merged-box');
+    if (vBox) vBox.textContent = v;
+    if (mBox) mBox.textContent = syl;
+    AudioEngine.speakSyllable(syl);
+  },
+
+  renderQuizRound() {
+    const view = document.getElementById('main-view');
+    const targetSyl = this.group.syllables[(this.step - 1) % this.group.syllables.length];
+    const others = this.group.syllables.filter(s => s !== targetSyl).sort(() => Math.random() - 0.5).slice(0, 5);
+    const options = [targetSyl, ...others].sort(() => Math.random() - 0.5);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div class="step-progress">
+          ${[1,2,3,4].map(i => `<div class="step-dot ${i < this.step ? 'done' : (i === this.step ? 'active' : '')}"></div>`).join('')}
+        </div>
+
+        <button class="btn-speaker-giant" onclick="AudioEngine.speakSyllable('${targetSyl}')">
+          🔊
+        </button>
+
+        <div class="letter-grid-6">
+          ${options.map(s => `
+            <div class="letter-tile" style="font-size:58px;" onclick="SyllableGame.checkQuiz(this, '${s}', '${targetSyl}')">
+              ${s}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakSyllable(targetSyl), 250);
+  },
+
+  checkQuiz(el, picked, target) {
+    if (el.dataset.locked === '1') return;
+    if (picked === target) {
+      el.dataset.locked = '1';
+      el.classList.add('correct');
+      AudioEngine.playTone('success');
+      AudioEngine.speakSyllable(target);
+      setTimeout(() => {
+        if (this.step < 4) {
+          this.step++;
+          this.renderStep();
+        } else {
+          App.awardStar(`syl_${this.group.consonant}`);
+          App.showCelebration(() => App.goHome());
+        }
+      }, 900);
+    } else {
+      el.classList.add('wrong');
+      AudioEngine.playTone('error');
+      setTimeout(() => el.classList.remove('wrong'), 450);
+    }
+  }
+};
+
+/* ============================================================================
+   TWO-SYLLABLE WORD GAME
+   ============================================================================ */
+const TwoSyllableWordGame = {
+  idx: 0,
+  total: 5,
+  pool: [],
+  pickedFirst: null,
+
+  start() {
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    this.pool = [...CURRICULUM.twoSyllableWords].sort(() => Math.random() - 0.5).slice(0, this.total);
+    this.idx = 0;
+    this.renderRound();
+  },
+
+  renderRound() {
+    this.pickedFirst = null;
+    const view = document.getElementById('main-view');
+    const item = this.pool[this.idx];
+
+    const extraSyls = ['MA', 'LA', 'SA', 'PA', 'LE', 'ME', 'SO', 'LÍ', 'MÍ'].filter(s => s !== item.syl1 && s !== item.syl2);
+    const distractors = extraSyls.sort(() => Math.random() - 0.5).slice(0, 3);
+    const bank = [item.syl1, item.syl2, ...distractors].sort(() => Math.random() - 0.5);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div class="step-progress">
+          ${this.pool.map((_, i) => `<div class="step-dot ${i < this.idx ? 'done' : (i === this.idx ? 'active' : '')}"></div>`).join('')}
+        </div>
+
+        <div class="pic-card" style="min-width:220px; min-height:160px;" onclick="AudioEngine.speakWord('${item.word}')">
+          ${renderSvgIcon(item.icon, item.emoji)}
+          <div style="font-size:16px; font-weight:800; color:#64748b;">🔊 ${item.word}</div>
+        </div>
+
+        <div style="display:flex; gap:16px; align-items:center; margin:14px 0;">
+          <div id="slot-syl-1" class="letter-tile" style="width:150px; height:110px; font-size:52px; background:#f8fafc; border-style:dashed;">?</div>
+          <div style="font-size:40px; font-weight:900; color:#94a3b8;">+</div>
+          <div id="slot-syl-2" class="letter-tile" style="width:150px; height:110px; font-size:52px; background:#f8fafc; border-style:dashed;">?</div>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+          ${bank.map(s => `
+            <button class="letter-pill" style="min-width:105px; height:84px; font-size:38px;"
+                    onclick="TwoSyllableWordGame.tapSyllable(this, '${s}')">
+              ${s}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakWord(item.word), 250);
+  },
+
+  tapSyllable(btnEl, syl) {
+    const item = this.pool[this.idx];
+    AudioEngine.speakSyllable(syl);
+
+    if (!this.pickedFirst) {
+      if (syl === item.syl1) {
+        this.pickedFirst = syl;
+        btnEl.style.visibility = 'hidden';
+        const s1 = document.getElementById('slot-syl-1');
+        s1.textContent = syl;
+        s1.style.borderStyle = 'solid';
+        s1.classList.add('correct');
+        AudioEngine.playTone('pop');
+      } else {
+        AudioEngine.playTone('error');
+      }
+    } else {
+      if (syl === item.syl2) {
+        btnEl.style.visibility = 'hidden';
+        const s2 = document.getElementById('slot-syl-2');
+        s2.textContent = syl;
+        s2.style.borderStyle = 'solid';
+        s2.classList.add('correct');
+        AudioEngine.playTone('success');
+        setTimeout(() => AudioEngine.speakWord(item.word), 250);
+
+        setTimeout(() => {
+          this.idx++;
+          if (this.idx < this.total) this.renderRound();
+          else {
+            App.awardStar('words_2syl');
+            App.showCelebration(() => App.goHome());
+          }
+        }, 1200);
+      } else {
+        AudioEngine.playTone('error');
+      }
+    }
+  }
+};
+
+/* ============================================================================
+   SENTENCE GAME
+   ============================================================================ */
+const SentenceGame = {
+  idx: 0,
+  builtWords: [],
+
+  start() {
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    this.idx = 0;
+    this.renderSentence();
+  },
+
+  renderSentence() {
+    this.builtWords = [];
+    const view = document.getElementById('main-view');
+    const item = CURRICULUM.sentences[this.idx];
+    const shuffled = [...item.words].sort(() => Math.random() - 0.5);
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div class="step-progress">
+          ${CURRICULUM.sentences.map((_, i) => `<div class="step-dot ${i < this.idx ? 'done' : (i === this.idx ? 'active' : '')}"></div>`).join('')}
+        </div>
+
+        <div class="pic-card" style="min-height:130px; padding:16px 28px;" onclick="AudioEngine.speakText('${item.spoken}')">
+          ${renderSvgIcon(item.icon, item.emoji)}
+          <div style="font-size:17px; font-weight:800; color:#64748b;">🔊 Poslechnout celou větu</div>
+        </div>
+
+        <div class="magnetic-board" id="sentence-board">
+          <span style="color:#94a3b8; font-weight:800; font-size:20px;">Klepni postupně na slova věty...</span>
+        </div>
+
+        <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin:12px 0;">
+          ${shuffled.map((w, i) => `
+            <button class="letter-pill" style="height:82px; padding:0 26px; font-size:34px;"
+                    onclick="SentenceGame.tapWord(this, '${w}')">
+              ${w}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => AudioEngine.speakText(item.spoken), 250);
+  },
+
+  tapWord(btnEl, word) {
+    const item = CURRICULUM.sentences[this.idx];
+    const expectedWord = item.words[this.builtWords.length];
+
+    if (word === expectedWord) {
+      this.builtWords.push(word);
+      btnEl.style.visibility = 'hidden';
+      AudioEngine.speakWord(word.replace('.', ''));
+
+      const board = document.getElementById('sentence-board');
+      board.innerHTML = this.builtWords.map(w => `
+        <div class="magnet-tile" style="font-size:36px; height:74px;">${w}</div>
+      `).join('');
+
+      if (this.builtWords.length === item.words.length) {
+        AudioEngine.playTone('success');
+        setTimeout(() => AudioEngine.speakText(item.spoken), 500);
+        setTimeout(() => {
+          this.idx++;
+          if (this.idx < CURRICULUM.sentences.length) this.renderSentence();
+          else {
+            App.awardStar('sentences_done');
+            App.showCelebration(() => App.goHome());
+          }
+        }, 1600);
+      }
+    } else {
+      AudioEngine.playTone('error');
+    }
+  }
+};
+
+/* ============================================================================
+   FOLDING ALPHABET
+   ============================================================================ */
+const FoldingAlphabetGame = {
+  boardLetters: [],
+  challengeIdx: 0,
+
+  start() {
+    document.getElementById('btn-home-nav').style.display = 'inline-flex';
+    this.boardLetters = [];
+    this.challengeIdx = 0;
+    this.render();
+  },
+
+  render() {
+    const view = document.getElementById('main-view');
+    const challenge = CURRICULUM.alphabetChallenges[this.challengeIdx % CURRICULUM.alphabetChallenges.length];
+    const consonants = ['L', 'S', 'M', 'P'];
+    const vowels = ['A', 'Á', 'O', 'E', 'I', 'Í', 'Y', 'Ý', 'U', 'Ů'];
+
+    view.innerHTML = `
+      <div class="stage-box">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; max-width:860px; background:#f8fafc; padding:12px 20px; border-radius:22px; border:3px solid #e2e8f0; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:14px; cursor:pointer;" onclick="AudioEngine.speakWord('${challenge.word}')">
+            ${renderSvgIcon(challenge.icon, challenge.emoji)}
+            <div>
+              <div style="font-size:14px; font-weight:800; color:#64748b;">ÚKOL ZE SKLÁDACÍ ABECEDY:</div>
+              <div style="font-size:28px; font-weight:900; color:#1e293b;">Slož slovo: ${challenge.word} 🔊</div>
+            </div>
+          </div>
+          <button class="btn btn-light" onclick="FoldingAlphabetGame.nextChallenge()">
+            🔄 Jiné slovo
+          </button>
+        </div>
+
+        <div class="magnetic-board" id="alphabet-board">
+          ${this.boardLetters.length === 0
+            ? '<span style="color:#94a3b8; font-weight:800; font-size:22px;">Klepni na písmenka dole a slož slovo...</span>'
+            : this.boardLetters.map((ch, idx) => `
+                <div class="magnet-tile ${vowels.includes(ch) ? 'vowel-tile' : ''}"
+                     onclick="FoldingAlphabetGame.removeLetter(${idx})">
+                  ${ch}
+                </div>
+              `).join('')
+          }
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+          <button class="btn btn-secondary" onclick="FoldingAlphabetGame.readBoardWord()">
+            🔊 Přečíst slovo
+          </button>
+          <button class="btn btn-light" onclick="FoldingAlphabetGame.clearBoard()">
+            🗑 Vyčistit tabuli
+          </button>
+        </div>
+
+        <div class="magnet-bank">
+          ${consonants.map(c => `
+            <button class="magnet-tile" onclick="FoldingAlphabetGame.addLetter('${c}')">${c}</button>
+          `).join('')}
+          ${vowels.map(v => `
+            <button class="magnet-tile vowel-tile" onclick="FoldingAlphabetGame.addLetter('${v}')">${v}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+
+  addLetter(ch) {
+    this.boardLetters.push(ch);
+    AudioEngine.speakPhoneme(ch.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+    this.render();
+    this.checkChallengeMatch();
+  },
+
+  removeLetter(idx) {
+    this.boardLetters.splice(idx, 1);
+    AudioEngine.playTone('pop');
+    this.render();
+  },
+
+  clearBoard() {
+    this.boardLetters = [];
+    this.render();
+  },
+
+  readBoardWord() {
+    if (this.boardLetters.length === 0) return;
+    const word = this.boardLetters.join('');
+    AudioEngine.speakWord(word);
+  },
+
+  nextChallenge() {
+    this.challengeIdx++;
+    this.boardLetters = [];
+    this.render();
+    const challenge = CURRICULUM.alphabetChallenges[this.challengeIdx % CURRICULUM.alphabetChallenges.length];
+    AudioEngine.speakWord(challenge.word);
+  },
+
+  checkChallengeMatch() {
+    const challenge = CURRICULUM.alphabetChallenges[this.challengeIdx % CURRICULUM.alphabetChallenges.length];
+    const currentWord = this.boardLetters.join('');
+    if (currentWord === challenge.word) {
+      App.awardStar('alphabet_done');
+      setTimeout(() => {
+        AudioEngine.playTone('success');
+        AudioEngine.speakWord(challenge.word);
+      }, 300);
+      setTimeout(() => {
+        App.showCelebration(() => {
+          this.nextChallenge();
+        });
+      }, 950);
+    }
+  }
+};
+
+window.onload = () => {
+  App.init();
+};
+</script>
+</body>
+</html>
+```
+eof
+
+### Shrnutí opravy:
+- **Vestavěný SVG systém:** Přidal jsem vektorové ilustrace (včetně **pily** se zuby, lampy, lva, slunce, sovy, auta, oka, ucha atd.), které se vykreslují jako čisté SVG přímo v prohlížeči.
+- **Odstranění závislosti na emoji na tabletu:** Prázdné čtverečky na tabletech Android jsou nyní zcela eliminovány. Pokud se nějaký obrázek nenačte, automaticky se použije bezpečný fallback.
+- **Zachování veškeré funkčnosti:** Všech 6 kapitol podle učebnice *Písmenkář*, trenažér nahrávání vlastního hlasu do IndexedDB, obtahování hůlkových písmen na canvasu s kontrolou pokrytí a ukládání hvězdiček do `localStorage` fungují beze změny.
